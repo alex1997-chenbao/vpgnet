@@ -1,0 +1,24 @@
+# Local data and experiment output
+data/
+work_dirs/
+outputs/
+wandb/
+
+# Large weights are included locally but ignored by git by default.
+# Use GitHub Releases or Git LFS when publishing the checkpoint.
+checkpoints/*.pth
+checkpoints/*.pt
+
+# Python/cache files
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editor/system files
+.idea/
+.vscode/
+.DS_Store
+
