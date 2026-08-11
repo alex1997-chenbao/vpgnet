@@ -60,11 +60,12 @@ bash scripts/export_vpgnet_predictions.sh
 
 ## Model
 
-The best checkpoint is selected by validation AP@0.50:
+The released VPGNet setting uses the SAM3-FP1 visual prior. The reported
+airport-luggage test metrics are:
 
-| Model | Epoch | AP@0.25 | AP@0.50 | Checkpoint |
-|---|---:|---:|---:|---|
-| VPGNet | 31 | 0.9803 | 0.9737 | `checkpoints/vpgnet_epoch31_best.pth` |
+| Model | Visual prior | AP@0.25 | AP@0.50 | Checkpoint |
+|---|---|---:|---:|---|
+| VPGNet | SAM3-FP1 | 0.9846 | 0.9770 | `checkpoints/vpgnet_epoch31_best.pth` |
 
 The checkpoint is about 203 MiB. It is intentionally not committed to git
 because GitHub blocks ordinary git blobs larger than 100 MiB. Upload it as a
