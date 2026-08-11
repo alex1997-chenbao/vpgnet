@@ -7,9 +7,12 @@ Dataset files and model weights are excluded from git.
 
 ```bash
 cd VPGNet-Airport-Luggage-OpenSource
-git remote add origin https://github.com/alex1997-chenbao/vpgnet.git
 git push -u origin main
 ```
+
+GitHub no longer accepts account passwords for HTTPS pushes. If this machine is
+not logged in, use a GitHub personal access token as the password when prompted,
+or install/authenticate GitHub CLI first.
 
 Target repository:
 
@@ -19,7 +22,15 @@ https://github.com/alex1997-chenbao/vpgnet
 
 Then upload the checkpoint as a GitHub Release asset:
 
-The local asset is in `../VPGNet-Airport-Luggage-ReleaseAssets/`.
+```text
+../VPGNet-Airport-Luggage-ReleaseAssets/vpgnet_sam3fp1_best_epoch28.pth
+```
+
+Checkpoint SHA256:
+
+```text
+150fa0fef23a6e1548a86511754a862cc22ac814e8b05dc6b524dce6ad4b87e1
+```
 
 ## Option B: Upload the source zip
 
@@ -29,4 +40,6 @@ The local source zip is `../VPGNet-Airport-Luggage-OpenSource_github.zip`.
 
 Upload the checkpoint separately as a Release asset:
 
-The local asset is in `../VPGNet-Airport-Luggage-ReleaseAssets/`.
+```text
+../VPGNet-Airport-Luggage-ReleaseAssets/vpgnet_sam3fp1_best_epoch28.pth
+```
