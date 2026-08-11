@@ -1,0 +1,16 @@
+{
+  "model": "VPGNet",
+  "task": "single-class top-view airport luggage 3D detection",
+  "config": "configs/vpgnet/vpgnet_airport_luggage.py",
+  "checkpoint": "checkpoints/vpgnet_sam3fp1_best_epoch28.pth",
+  "checkpoint_size_bytes": 188701348,
+  "checkpoint_sha256": "150fa0fef23a6e1548a86511754a862cc22ac814e8b05dc6b524dce6ad4b87e1",
+  "epoch": 28,
+  "visual_prior": "SAM3-FP1",
+  "selection_rule": "best validation mAP_0.50 after resuming from epoch_25 and saving epochs 26-30",
+  "metrics": {
+    "AP@0.25": 0.9869,
+    "AP@0.50": 0.9805
+  },
+  "source_work_dir": "vpgnet_sam3fp1_resume25_savebest_20260811_200519"
+}

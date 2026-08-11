@@ -5,7 +5,7 @@
 First place the checkpoint release asset at:
 
 ```text
-checkpoints/vpgnet_epoch31_best.pth
+checkpoints/vpgnet_sam3fp1_best_epoch28.pth
 ```
 
 ```bash
@@ -18,7 +18,7 @@ The script runs:
 ```bash
 python tools/test.py \
   configs/vpgnet/vpgnet_airport_luggage.py \
-  checkpoints/vpgnet_epoch31_best.pth \
+  checkpoints/vpgnet_sam3fp1_best_epoch28.pth \
   --work-dir work_dirs/vpgnet_airport_luggage_eval
 ```
 
@@ -35,7 +35,7 @@ configuration, 20000 sampled points, and the VPGNet fusion/refinement modules.
 ## Export JSONL Predictions
 
 First place the checkpoint release asset at
-`checkpoints/vpgnet_epoch31_best.pth`.
+`checkpoints/vpgnet_sam3fp1_best_epoch28.pth`.
 
 ```bash
 bash scripts/export_vpgnet_predictions.sh

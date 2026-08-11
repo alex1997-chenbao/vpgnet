@@ -2,14 +2,14 @@
 set -euo pipefail
 
 CONFIG="${CONFIG:-configs/vpgnet/vpgnet_airport_luggage.py}"
-CHECKPOINT="${CHECKPOINT:-checkpoints/vpgnet_epoch31_best.pth}"
+CHECKPOINT="${CHECKPOINT:-checkpoints/vpgnet_sam3fp1_best_epoch28.pth}"
 OUT_JSONL="${OUT_JSONL:-work_dirs/vpgnet_predictions/val_predictions.jsonl}"
 BATCH_SIZE="${BATCH_SIZE:-1}"
 NUM_WORKERS="${NUM_WORKERS:-2}"
 
 if [[ ! -f "$CHECKPOINT" ]]; then
   echo "Checkpoint not found: $CHECKPOINT" >&2
-  echo "Download the GitHub Release asset and place it at checkpoints/vpgnet_epoch31_best.pth" >&2
+  echo "Download the GitHub Release asset and place it at checkpoints/vpgnet_sam3fp1_best_epoch28.pth" >&2
   exit 1
 fi
 
