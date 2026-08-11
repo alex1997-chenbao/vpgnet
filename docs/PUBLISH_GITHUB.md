@@ -7,8 +7,14 @@ Dataset files and model weights are excluded from git.
 
 ```bash
 cd VPGNet-Airport-Luggage-OpenSource
-git remote add origin git@github.com:<user>/<repo>.git
+git remote add origin https://github.com/alex1997-chenbao/vpgnet.git
 git push -u origin main
+```
+
+Target repository:
+
+```text
+https://github.com/alex1997-chenbao/vpgnet
 ```
 
 Then upload the checkpoint as a GitHub Release asset:
