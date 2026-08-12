@@ -1,5 +1,63 @@
 # Reproduce
 
+## Prepare Data
+
+Download the train/test dataset from Hugging Face:
+
+```bash
+cd VPGNet-Airport-Luggage-OpenSource
+hf auth login  # required if the dataset is private
+bash scripts/download_dataset.sh
+```
+
+This creates:
+
+```text
+data/sunrgbd/
+  points/
+  sunrgbd_trainval/calib/
+  sunrgbd_trainval/image/
+  sunrgbd_trainval/label/
+  sunrgbd_trainval/sunrgbd_infos_train.pkl
+  sunrgbd_trainval/sunrgbd_infos_val.pkl
+  train_data_idx.txt
+  val_data_idx.txt
+```
+
+Then extract SAM3-FP1 image features:
+
+```bash
+git clone https://github.com/facebookresearch/sam3.git ../sam3
+pip install -e ../sam3
+hf auth login
+bash scripts/extract_sam3_features.sh
+```
+
+If you let the extractor download `sam3.pt` automatically, request access to
+`facebook/sam3` on Hugging Face first.
+
+The extractor writes:
+
+```text
+data/sunrgbd/sunrgbd_trainval/sam_f/*.pt
+```
+
+Use a local SAM3 checkpoint if you have one:
+
+```bash
+SAM_CHECKPOINT=/path/to/sam3.pt bash scripts/extract_sam3_features.sh
+```
+
+SAM3 feature extraction can be done in a separate SAM3 environment. After
+`data/sunrgbd/sunrgbd_trainval/sam_f/*.pt` is generated, switch back to the
+VPGNet/MMDetection3D environment for training and evaluation.
+
+One-shot preparation and training:
+
+```bash
+bash scripts/prepare_and_train_vpgnet.sh
+```
+
 ## Evaluate
 
 First place the checkpoint release asset at:

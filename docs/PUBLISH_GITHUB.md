@@ -20,6 +20,12 @@ Target repository:
 https://github.com/alex1997-chenbao/vpgnet
 ```
 
+Companion dataset:
+
+```text
+https://huggingface.co/datasets/alex-chenbao1997/vpgnet-airport-luggage
+```
+
 Then upload the checkpoint as a GitHub Release asset:
 
 ```text

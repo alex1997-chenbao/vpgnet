@@ -1,4 +1,5 @@
 lyft_dataset_sdk
+huggingface_hub
 networkx>=2.5
 numba # you should install numba==0.53.0 if your environment is cuda-9.0
 numpy
@@ -8,4 +9,5 @@ plyfile
 scikit-image
 # by default we also use tensorboard to log results
 tensorboard
+timm>=1.0.17
 trimesh

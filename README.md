@@ -23,7 +23,12 @@ used in the current experiments.
   - `tools/misc/postprocess_vpgnet_with_sam3_instance_masks.py`
   - `tools/misc/visualize_vpgnet_predictions_o3d.py`
 
-Dataset files are not included in this package.
+Dataset files and SAM3 feature files are not included in git. The training and
+test files are published on Hugging Face:
+
+```text
+https://huggingface.co/datasets/alex-chenbao1997/vpgnet-airport-luggage
+```
 
 ## Quick Start
 
@@ -32,6 +37,41 @@ Install this package in the same style as MMDetection3D:
 ```bash
 cd VPGNet-Airport-Luggage-OpenSource
 pip install -v -e .
+```
+
+SAM3 feature extraction may be run in a separate SAM3 environment. The saved
+`.pt` features are environment-independent and are then consumed by the VPGNet
+training environment.
+
+Download the released train/test dataset:
+
+```bash
+hf auth login  # required if the Hugging Face dataset is private
+bash scripts/download_dataset.sh
+```
+
+Prepare the SAM3-FP1 visual prior used by the released model:
+
+```bash
+git clone https://github.com/facebookresearch/sam3.git ../sam3
+pip install -e ../sam3
+hf auth login  # required by facebook/sam3 if you do not provide sam3.pt locally
+bash scripts/extract_sam3_features.sh
+```
+
+Before downloading the SAM3 checkpoint from Hugging Face, request access to
+`facebook/sam3` on the Hugging Face model page.
+
+The extractor writes features to:
+
+```text
+data/sunrgbd/sunrgbd_trainval/sam_f/
+```
+
+Run the whole data-preparation and training sequence:
+
+```bash
+bash scripts/prepare_and_train_vpgnet.sh
 ```
 
 Before evaluation, download or copy the checkpoint release asset to:
@@ -79,15 +119,20 @@ By default the config expects:
 data/sunrgbd/
   points/
   sunrgbd_trainval/
+    calib/
     image/
+    label/
     sam_f/
     sunrgbd_infos_train.pkl
     sunrgbd_infos_val.pkl
+  train_data_idx.txt
+  val_data_idx.txt
 ```
 
 The SAM feature loader reads `.pt` feature files. If `sam_feat_prefix` is not
 specified, the dataset maps each image path from `image/*.jpg` to
-`sam_f/*.pt`.
+`sam_f/*.pt`. The released VPGNet setting uses SAM3-FP1 features saved as
+`float16` tensors with shape `(256, 144, 144)`.
 
 More notes are in `docs/DATASET.md`, `docs/MODEL_ZOO.md`, and
 `docs/REPRODUCE.md`.
