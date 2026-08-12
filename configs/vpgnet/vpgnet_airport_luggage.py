@@ -459,12 +459,11 @@ param_scheduler = [
     dict(
         begin=0,
         by_epoch=True,
-        end=100,
+        end=50,
         gamma=0.1,
         milestones=[
-            25,
-            50,
-            90,
+            20,
+            40,
         ],
         type='MultiStepLR'),
 ]
@@ -537,7 +536,7 @@ test_pipeline = [
         'sam_feat',
     ], type='Pack3DDetInputs'),
 ]
-train_cfg = dict(max_epochs=40, type='EpochBasedTrainLoop', val_interval=1)
+train_cfg = dict(max_epochs=50, type='EpochBasedTrainLoop', val_interval=1)
 train_dataloader = dict(
     batch_size=10,
     dataset=dict(
