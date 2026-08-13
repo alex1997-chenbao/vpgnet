@@ -12,7 +12,7 @@ used in the current experiments.
   - GCA and feature fusion modules: `mmdet3d/models/my_module/`
   - luggage dataset and SAM feature loading: `mmdet3d/datasets/`
 - Best config: `configs/vpgnet/vpgnet_airport_luggage.py`
-- Best checkpoint metadata: `checkpoints/vpgnet_sam3fp1_best_epoch24.json`
+- Best checkpoint metadata: `checkpoints/best.json`
 - Core tools:
   - `tools/train.py`
   - `tools/test.py`
@@ -103,7 +103,7 @@ airport-luggage test metrics are:
 
 | Model | Visual prior | AP@0.25 | AP@0.50 | Checkpoint |
 |---|---|---:|---:|---|
-| VPGNet | SAM3-FP1 | 0.9846 | 0.9794 | [Hugging Face](https://huggingface.co/alex-chenbao1997/vpgnet-airport-luggage/blob/main/vpgnet_sam3fp1_best_epoch24.pth) |
+| VPGNet | SAM3-FP1 | 0.9846 | 0.9794 | [Hugging Face](https://huggingface.co/alex-chenbao1997/vpgnet-airport-luggage/blob/main/best.pth) |
 
 ## Data Layout
 

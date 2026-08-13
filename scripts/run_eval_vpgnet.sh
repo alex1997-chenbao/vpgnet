@@ -2,7 +2,7 @@
 set -euo pipefail
 
 CONFIG="${CONFIG:-configs/vpgnet/vpgnet_airport_luggage.py}"
-CHECKPOINT="${CHECKPOINT:-checkpoints/vpgnet_sam3fp1_best_epoch24.pth}"
+CHECKPOINT="${CHECKPOINT:-checkpoints/best.pth}"
 WORK_DIR="${WORK_DIR:-work_dirs/vpgnet_airport_luggage_eval}"
 
 if [[ ! -f "$CHECKPOINT" ]]; then

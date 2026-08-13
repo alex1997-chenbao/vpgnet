@@ -2,12 +2,11 @@
 from .frecross import FullLocalCrossAttention
 from .samfre import FrequencyPromptAdapter
 from .frelocalfusion import FreqPromptLocalMHACrossFusion
-from .localrefiner import GraphOnlyLocalAggregator, LocalGeometricRefiner
+from .localrefiner import LocalGeometricRefiner
 
 __all__ = [
     'FullLocalCrossAttention',
     'FrequencyPromptAdapter',
     'FreqPromptLocalMHACrossFusion',
     'LocalGeometricRefiner',
-    'GraphOnlyLocalAggregator'
 ]

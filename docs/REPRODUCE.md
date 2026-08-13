@@ -75,7 +75,7 @@ The script runs:
 ```bash
 python tools/test.py \
   configs/vpgnet/vpgnet_airport_luggage.py \
-  checkpoints/vpgnet_sam3fp1_best_epoch24.pth \
+  checkpoints/best.pth \
   --work-dir work_dirs/vpgnet_airport_luggage_eval
 ```
 

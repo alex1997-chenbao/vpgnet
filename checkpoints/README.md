@@ -6,7 +6,7 @@ Download the VPGNet checkpoint from Hugging Face:
 bash scripts/download_checkpoint.sh
 ```
 
-This creates `checkpoints/vpgnet_sam3fp1_best_epoch24.pth`.
+This creates `checkpoints/best.pth`.
 
 Expected SHA256:
 
