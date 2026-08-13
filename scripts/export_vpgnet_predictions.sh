@@ -9,7 +9,7 @@ NUM_WORKERS="${NUM_WORKERS:-2}"
 
 if [[ ! -f "$CHECKPOINT" ]]; then
   echo "Checkpoint not found: $CHECKPOINT" >&2
-  echo "Download the GitHub Release asset and place it at checkpoints/vpgnet_sam3fp1_best_epoch28.pth" >&2
+  echo "Run: bash scripts/download_checkpoint.sh" >&2
   exit 1
 fi
 

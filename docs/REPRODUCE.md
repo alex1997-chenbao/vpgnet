@@ -6,7 +6,6 @@ Download the train/test dataset from Hugging Face:
 
 ```bash
 cd VPGNet-Airport-Luggage-OpenSource
-hf auth login  # required if the dataset is private
 bash scripts/download_dataset.sh
 ```
 
@@ -60,10 +59,10 @@ bash scripts/prepare_and_train_vpgnet.sh
 
 ## Evaluate
 
-First place the checkpoint release asset at:
+Download the pretrained checkpoint:
 
-```text
-checkpoints/vpgnet_sam3fp1_best_epoch28.pth
+```bash
+bash scripts/download_checkpoint.sh
 ```
 
 ```bash
@@ -92,8 +91,7 @@ configuration, 20000 sampled points, and the VPGNet fusion/refinement modules.
 
 ## Export JSONL Predictions
 
-First place the checkpoint release asset at
-`checkpoints/vpgnet_sam3fp1_best_epoch28.pth`.
+Use the checkpoint downloaded by `scripts/download_checkpoint.sh`.
 
 ```bash
 bash scripts/export_vpgnet_predictions.sh

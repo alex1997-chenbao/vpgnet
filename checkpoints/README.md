@@ -1,13 +1,12 @@
 # Checkpoints
 
-Place the VPGNet checkpoint here before evaluation:
+Download the VPGNet checkpoint from Hugging Face:
 
-```text
-checkpoints/vpgnet_sam3fp1_best_epoch28.pth
+```bash
+bash scripts/download_checkpoint.sh
 ```
 
-The file is about 180 MiB, so it is not tracked in git by default. For GitHub,
-upload it as a Release asset or use Git LFS.
+This creates `checkpoints/vpgnet_sam3fp1_best_epoch28.pth`.
 
 Expected SHA256:
 

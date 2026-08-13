@@ -23,8 +23,7 @@ used in the current experiments.
   - `tools/misc/postprocess_vpgnet_with_sam3_instance_masks.py`
   - `tools/misc/visualize_vpgnet_predictions_o3d.py`
 
-Dataset files and SAM3 feature files are not included in git. The training and
-test files are published on Hugging Face:
+The public training and test dataset is available on Hugging Face:
 
 ```text
 https://huggingface.co/datasets/alex-chenbao1997/vpgnet-airport-luggage
@@ -46,7 +45,6 @@ training environment.
 Download the released train/test dataset:
 
 ```bash
-hf auth login  # required if the Hugging Face dataset is private
 bash scripts/download_dataset.sh
 ```
 
@@ -74,10 +72,10 @@ Run the whole data-preparation and training sequence:
 bash scripts/prepare_and_train_vpgnet.sh
 ```
 
-Before evaluation, download or copy the checkpoint release asset to:
+Download the pretrained checkpoint:
 
-```text
-checkpoints/vpgnet_sam3fp1_best_epoch28.pth
+```bash
+bash scripts/download_checkpoint.sh
 ```
 
 Run evaluation:
@@ -105,11 +103,7 @@ airport-luggage test metrics are:
 
 | Model | Visual prior | AP@0.25 | AP@0.50 | Checkpoint |
 |---|---|---:|---:|---|
-| VPGNet | SAM3-FP1 | 0.9869 | 0.9805 | `checkpoints/vpgnet_sam3fp1_best_epoch28.pth` |
-
-The checkpoint is about 180 MiB. It is intentionally not committed to git
-because GitHub blocks ordinary git blobs larger than 100 MiB. Upload it as a
-GitHub Release asset or publish it with Git LFS.
+| VPGNet | SAM3-FP1 | 0.9869 | 0.9805 | [Hugging Face](https://huggingface.co/alex-chenbao1997/vpgnet-airport-luggage/blob/main/vpgnet_sam3fp1_best_epoch28.pth) |
 
 ## Data Layout
 

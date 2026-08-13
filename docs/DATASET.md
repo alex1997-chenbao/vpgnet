@@ -10,7 +10,6 @@ https://huggingface.co/datasets/alex-chenbao1997/vpgnet-airport-luggage
 Download them with:
 
 ```bash
-hf auth login  # required if the dataset is private
 bash scripts/download_dataset.sh
 ```
 
@@ -46,8 +45,8 @@ The default pipeline loads:
 
 ## SAM3 Feature Extraction
 
-SAM3 features are intentionally not uploaded with the dataset because they are
-large and can be regenerated from the images.
+SAM3 features are generated from the released RGB images before VPGNet
+training and evaluation.
 
 Install SAM3 and extract the visual prior:
 
