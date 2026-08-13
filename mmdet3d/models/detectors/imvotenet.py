@@ -295,12 +295,7 @@ class ImVoteNet(Base3DDetector):
         seed_features = x['fp_features'][-1]
         seed_indices = x['fp_indices'][-1]
 
-
-        support_points = x['fp_xyz'][-2]
-        support_features = x['fp_features'][-2]
-
-
-        return (seed_points, seed_features, seed_indices, support_points, support_features)
+        return (seed_points, seed_features, seed_indices)
 
     def _get_sam_loader_pool(self) -> ThreadPoolExecutor:
         """Lazily create the disk IO pool used by the fallback SAM loader."""
@@ -357,8 +352,8 @@ class ImVoteNet(Base3DDetector):
             sam_inputs: Optional[Union[List[Tensor], Tensor]] = None) -> dict:
         """Prepare the shared point-image features used by train/test heads."""
         stack_points = torch.stack(points)
-        seeds_3d, seed_3d_features, seed_indices, support_points, \
-            support_features = self.extract_pts_feat(stack_points)
+        seeds_3d, seed_3d_features, seed_indices = self.extract_pts_feat(
+            stack_points)
 
         fused_feat = seed_3d_features
         if self.local_atten is not None:
@@ -382,10 +377,8 @@ class ImVoteNet(Base3DDetector):
 
         if self.local_refiner is not None:
             refined_feat = self.local_refiner(
-                query_xyz=seeds_3d,
-                query_feat=fused_feat,
-                support_xyz=support_points,
-                support_feat=support_features)
+                seeds_3d=seeds_3d,
+                fused_feat=fused_feat)
             fused_feat = seed_3d_features + refined_feat
 
         return dict(

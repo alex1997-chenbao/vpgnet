@@ -10,7 +10,12 @@ custom_imports = dict(
 data_root = 'data/sunrgbd'
 dataset_type = 'LuggageSUNRGBDDataset'
 default_hooks = dict(
-    checkpoint=dict(interval=1, max_keep_ckpts=-1, type='CheckpointHook'),
+    checkpoint=dict(
+        interval=1,
+        max_keep_ckpts=-1,
+        rule='greater',
+        save_best='mAP_0.50',
+        type='CheckpointHook'),
     logger=dict(interval=50, type='LoggerHook'),
     param_scheduler=dict(type='ParamSchedulerHook'),
     sampler_seed=dict(type='DistSamplerSeedHook'),
@@ -59,10 +64,9 @@ model = dict(
     fusion_layer=dict(
         max_imvote_per_pixel=3, num_classes=1, type='VoteFusion'),
     geometric_refiner=dict(
-        dist_threshold=0.2,
         embed_dim=256,
         k=16,
-        support_in_dim=256,
+        radius=0.2,
         tau=5.0,
         type='LocalGeometricRefiner'),
     img_backbone=dict(

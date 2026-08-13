@@ -194,48 +194,40 @@ def square_distance(src: torch.Tensor, dst: torch.Tensor) -> torch.Tensor:
 @MODELS.register_module()
 class LocalGeometricRefiner(BaseModule):
     def __init__(self,
-                 support_in_dim: int = 256,
                  embed_dim: int = 256,
                  k: int = 16,
                  tau: float = 5.0,
-                 dist_threshold: float = 0.2,
+                 radius: float = 0.2,
                  init_cfg: Optional[dict] = dict(type='Kaiming', layer=['Linear', 'Conv1d'])):
         super().__init__(init_cfg=init_cfg)
 
         self.k = k
-        self.d_model = embed_dim
+        self.embed_dim = embed_dim
         self.tau = tau
-        self.dist_threshold = dist_threshold
+        self.radius = radius
 
         self.query_proj = nn.Conv1d(embed_dim, embed_dim, 1)
-        self.support_proj = nn.Conv1d(support_in_dim, embed_dim, 1)
 
-        self.fc_delta = nn.Sequential(
-            nn.Linear(3, 64), nn.ReLU(),
+        self.geo_encoder = nn.Sequential(
+            nn.Linear(4, 64), nn.ReLU(),
             nn.Linear(64, embed_dim), nn.ReLU(),
             nn.Linear(embed_dim, embed_dim),
         )
 
-        self.fc_pair = nn.Sequential(
+        self.key_proj = nn.Sequential(
             nn.Linear(embed_dim * 2, embed_dim),
             nn.ReLU(),
             nn.Linear(embed_dim, embed_dim)
         )
 
-        self.fc_delta_local = nn.Sequential(
-            nn.Linear(3, 64), nn.ReLU(),
-            nn.Linear(64, embed_dim), nn.ReLU(),
-            nn.Linear(embed_dim, embed_dim),
-        )
-
-        self.fc_delta_abs = nn.Sequential(
-            nn.Linear(3, 64), nn.ReLU(),
-            nn.Linear(64, embed_dim), nn.ReLU(),
+        self.value_proj = nn.Sequential(
+            nn.Linear(embed_dim * 2, embed_dim),
+            nn.ReLU(),
             nn.Linear(embed_dim, embed_dim),
         )
 
         self.fuse_mlp = nn.Sequential(
-            nn.Conv1d(embed_dim * 3, embed_dim, 1),
+            nn.Conv1d(embed_dim * 4 + 3, embed_dim, 1),
             nn.BatchNorm1d(embed_dim),
             nn.ReLU(),
             nn.Conv1d(embed_dim, embed_dim, 1),
@@ -243,65 +235,53 @@ class LocalGeometricRefiner(BaseModule):
             nn.ReLU(),
         )
 
-        self.out_mlp = nn.Sequential(
-            nn.Linear(embed_dim, embed_dim),
-            nn.ReLU(),
-            nn.Linear(embed_dim, embed_dim)
-        )
-
     def forward(self,
-                query_xyz: torch.Tensor,      # (B, Nq, 3)
-                query_feat: torch.Tensor,     # (B, C, Nq)
-                support_xyz: torch.Tensor,    # (B, Ns, 3)
-                support_feat: torch.Tensor    # (B, C2, Ns)
+                seeds_3d: torch.Tensor,      # (B, M, 3)
+                fused_feat: torch.Tensor     # (B, C, M)
                 ) -> torch.Tensor:
 
-        B, Nq, _ = query_xyz.shape
-        k = min(self.k, support_xyz.shape[1])
-        dist_threshold_sq = self.dist_threshold * self.dist_threshold
-        query_feat = self.query_proj(query_feat).transpose(1, 2).contiguous()      # (B, Nq, C)
-        support_feat = self.support_proj(support_feat).transpose(1, 2).contiguous() # (B, Ns, C)
+        B, C, M = fused_feat.shape
+        k = min(self.k, M)
 
-        # KNN from dense support points using squared distances.
-        dist_mat = square_distance(query_xyz, support_xyz)
+        seed_feat = fused_feat.transpose(1, 2).contiguous()  # (B, M, C)
+        query_feat = self.query_proj(fused_feat).transpose(1, 2).contiguous()
+
+        # Radius-constrained KNN among GALF-fused seed points.
+        dist_mat = square_distance(seeds_3d, seeds_3d)
         knn_dist_sq, knn_idx = torch.topk(dist_mat, k=k, dim=-1, largest=False)
+        knn_xyz = index_points(seeds_3d, knn_idx)            # (B, M, K, 3)
+        knn_feat = index_points(seed_feat, knn_idx)          # (B, M, K, C)
 
-        knn_xyz = index_points(support_xyz, knn_idx)         # (B, Nq, K, 3)
-        knn_feat = index_points(support_feat, knn_idx)       # (B, Nq, K, C)
+        rel_xyz = knn_xyz - seeds_3d.unsqueeze(2)
+        rel_dist = torch.sqrt(knn_dist_sq.clamp_min(1e-12)).unsqueeze(-1)
+        geo_feat = self.geo_encoder(torch.cat([rel_xyz, rel_dist], dim=-1))
 
-        rel_xyz = query_xyz.unsqueeze(2) - knn_xyz           # (B, Nq, K, 3)
-        pos_feat = self.fc_delta(rel_xyz)
+        pair_feat = torch.cat([knn_feat, geo_feat], dim=-1)
+        key_feat = self.key_proj(pair_feat)
+        value_feat = self.value_proj(pair_feat)
 
-        pair_feat = self.fc_pair(torch.cat([knn_feat, pos_feat], dim=-1))
+        sim = F.cosine_similarity(query_feat.unsqueeze(2), key_feat, dim=-1)
+        valid_mask = rel_dist.squeeze(-1) < self.radius
+        sim = (sim / self.tau).masked_fill(~valid_mask, torch.finfo(sim.dtype).min)
 
-        sim = F.cosine_similarity(query_feat.unsqueeze(2), pair_feat, dim=-1)
-
-        valid_mask = knn_dist_sq < dist_threshold_sq
-        sim = sim / self.tau
-        sim = sim.masked_fill(~valid_mask, torch.finfo(sim.dtype).min)
-
-        valid_mask = valid_mask.to(sim.dtype)
-        weights = F.softmax(sim, dim=-1) * valid_mask
+        weights = F.softmax(sim, dim=-1) * valid_mask.to(sim.dtype)
         weights = weights / weights.sum(dim=-1, keepdim=True).clamp_min(1e-6)
+        local_context = (weights.unsqueeze(-1) * value_feat).sum(dim=2)
 
-        local_feat = (weights.unsqueeze(-1) * pair_feat).sum(dim=2)  # (B, Nq, C)
-        local_feat = F.relu(local_feat + query_feat)
+        masked_geo = geo_feat.masked_fill(
+            ~valid_mask.unsqueeze(-1), torch.finfo(geo_feat.dtype).min)
+        geo_context = masked_geo.max(dim=2).values
+        geo_context = torch.where(valid_mask.any(dim=2, keepdim=True),
+                                  geo_context,
+                                  torch.zeros_like(geo_context))
 
-        abs_pos_feat = self.fc_delta_abs(query_xyz)
-        rel_pos_feat = self.fc_delta_local(rel_xyz)
-        valid_count = valid_mask.sum(dim=2, keepdim=True).clamp_min(1.0)
-        rel_pos_feat = (rel_pos_feat * valid_mask.unsqueeze(-1)).sum(dim=2) / valid_count
+        global_context = seed_feat.mean(dim=1, keepdim=True).expand(-1, M, -1)
+        context = torch.cat(
+            [seed_feat, local_context, geo_context, seeds_3d, global_context],
+            dim=-1)
 
-        geo_feat = abs_pos_feat + rel_pos_feat
-        global_feat = local_feat.mean(dim=1, keepdim=True).expand(-1, Nq, -1)
-
-        fused = torch.cat([local_feat, global_feat, geo_feat], dim=-1).transpose(1, 2).contiguous()
-        fused = self.fuse_mlp(fused).transpose(1, 2).contiguous()
-
-        fused = F.relu(fused + local_feat)
-        out = F.relu(fused + self.out_mlp(fused))
-
-        return out.transpose(1, 2).contiguous()
+        refined_feat = self.fuse_mlp(context.transpose(1, 2).contiguous())
+        return refined_feat.contiguous()
 
 
 @MODELS.register_module()

@@ -3,7 +3,7 @@ set -euo pipefail
 
 HF_BIN="${HF_BIN:-hf}"
 MODEL_REPO="${MODEL_REPO:-alex-chenbao1997/vpgnet-airport-luggage}"
-CHECKPOINT_NAME="${CHECKPOINT_NAME:-vpgnet_sam3fp1_best_epoch28.pth}"
+CHECKPOINT_NAME="${CHECKPOINT_NAME:-vpgnet_sam3fp1_best_epoch24.pth}"
 CHECKPOINT_DIR="${CHECKPOINT_DIR:-checkpoints}"
 MAX_WORKERS="${MAX_WORKERS:-4}"
 USE_PROXY="${USE_PROXY:-0}"
