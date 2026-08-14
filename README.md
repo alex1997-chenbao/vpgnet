@@ -41,7 +41,8 @@ https://huggingface.co/datasets/alex-chenbao1997/vpgnet-airport-luggage
 Install this package in the same style as MMDetection3D:
 
 ```bash
-cd VPGNet-Airport-Luggage-OpenSource
+git clone https://github.com/alex1997-chenbao/vpgnet.git
+cd vpgnet
 pip install -v -e .
 ```
 
@@ -50,8 +51,9 @@ pip install -v -e .
 For public-dataset code validation, prepare SUN RGB-D with the standard
 MMDetection3D preprocessing pipeline, extract SAM3-FP1 image features if the
 config uses visual priors, then train with a SUN RGB-D VPGNet config through
-the same training entry point. The full data-preparation notes are in
-`docs/SUNRGBD.md`.
+the same training entry point. These SUN RGB-D commands are templates: replace
+`CONFIG` with your own SUN RGB-D VPGNet config. The full data-preparation notes
+are in `docs/SUNRGBD.md`.
 
 ```bash
 # In an official MMDetection3D checkout:
@@ -85,7 +87,7 @@ If the SAM3 checkpoint is already available locally, pass it with
 Train on SUN RGB-D:
 
 ```bash
-CONFIG=/path/to/vpgnet_sunrgbd.py \
+CONFIG=/path/to/your_vpgnet_sunrgbd_config.py \
 WORK_DIR=work_dirs/vpgnet_sunrgbd \
 bash scripts/run_train_vpgnet.sh
 ```
@@ -93,7 +95,7 @@ bash scripts/run_train_vpgnet.sh
 Evaluate a trained SUN RGB-D checkpoint with:
 
 ```bash
-CONFIG=/path/to/vpgnet_sunrgbd.py \
+CONFIG=/path/to/your_vpgnet_sunrgbd_config.py \
 CHECKPOINT=/path/to/checkpoint.pth \
 WORK_DIR=work_dirs/vpgnet_sunrgbd_eval \
 bash scripts/run_eval_vpgnet.sh

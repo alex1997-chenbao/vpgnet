@@ -10,7 +10,9 @@ This repository provides two validation paths:
 
 For public-dataset code validation, first prepare SUN RGB-D using the standard
 MMDetection3D data-preparation pipeline. A more detailed standalone version is
-provided in `docs/SUNRGBD.md`.
+provided in `docs/SUNRGBD.md`. The SUN RGB-D commands below are templates:
+replace `CONFIG` with your own SUN RGB-D VPGNet config before training or
+evaluation.
 
 Download the official SUN RGB-D files from:
 
@@ -70,7 +72,8 @@ If the SUN RGB-D config uses SAM3 visual priors, install SAM3 and extract
 SAM3-FP1 features:
 
 ```bash
-cd VPGNet-Airport-Luggage-OpenSource
+git clone https://github.com/alex1997-chenbao/vpgnet.git
+cd vpgnet
 git clone https://github.com/facebookresearch/sam3.git ../sam3
 pip install -e ../sam3
 hf auth login  # if SAM3 needs to download sam3.pt from Hugging Face
@@ -95,10 +98,10 @@ SAM_OUTPUT_DIR=data/sunrgbd/sunrgbd_trainval/sam_f \
 bash scripts/extract_sam3_features.sh
 ```
 
-Train with the common VPGNet training entry:
+Train with the common VPGNet training-entry template:
 
 ```bash
-CONFIG=/path/to/vpgnet_sunrgbd.py \
+CONFIG=/path/to/your_vpgnet_sunrgbd_config.py \
 WORK_DIR=work_dirs/vpgnet_sunrgbd \
 bash scripts/run_train_vpgnet.sh
 ```
@@ -106,7 +109,7 @@ bash scripts/run_train_vpgnet.sh
 Evaluate a trained SUN RGB-D checkpoint with:
 
 ```bash
-CONFIG=/path/to/vpgnet_sunrgbd.py \
+CONFIG=/path/to/your_vpgnet_sunrgbd_config.py \
 CHECKPOINT=/path/to/checkpoint.pth \
 WORK_DIR=work_dirs/vpgnet_sunrgbd_eval \
 bash scripts/run_eval_vpgnet.sh
@@ -121,7 +124,7 @@ No SUN RGB-D checkpoint or SUN RGB-D pretrained model is released here.
 Download the airport-luggage train/test dataset from Hugging Face:
 
 ```bash
-cd VPGNet-Airport-Luggage-OpenSource
+cd vpgnet
 bash scripts/download_dataset.sh
 ```
 
@@ -182,7 +185,7 @@ bash scripts/download_checkpoint.sh
 ```
 
 ```bash
-cd VPGNet-Airport-Luggage-OpenSource
+cd vpgnet
 bash scripts/run_eval_vpgnet.sh
 ```
 
@@ -198,7 +201,7 @@ python tools/test.py \
 ### Train
 
 ```bash
-cd VPGNet-Airport-Luggage-OpenSource
+cd vpgnet
 bash scripts/run_train_vpgnet.sh
 ```
 

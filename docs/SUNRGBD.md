@@ -1,8 +1,10 @@
 # Public SUN RGB-D Training Data Preparation
 
 This page describes the code-level SUN RGB-D validation path. It provides data
-preparation, SAM3 feature extraction, training, and evaluation commands only.
-No SUN RGB-D checkpoint or pretrained SUN RGB-D model is released here.
+preparation, SAM3 feature extraction, and training/evaluation command templates
+only. Replace `CONFIG` with your own SUN RGB-D VPGNet config before training or
+evaluation. No SUN RGB-D checkpoint or pretrained SUN RGB-D model is released
+here.
 
 ## 1. Prepare the official SUN RGB-D data
 
@@ -79,7 +81,8 @@ Use this processed `data/sunrgbd` root directly in this repository, or create a
 symlink to it:
 
 ```bash
-cd VPGNet-Airport-Luggage-OpenSource
+git clone https://github.com/alex1997-chenbao/vpgnet.git
+cd vpgnet
 ln -s /path/to/official/mmdetection3d/data/sunrgbd data/sunrgbd
 ```
 
@@ -92,7 +95,7 @@ Install SAM3 in a separate environment if needed. The saved `.pt` feature files
 are then consumed by the VPGNet/MMDetection3D training environment.
 
 ```bash
-cd VPGNet-Airport-Luggage-OpenSource
+cd vpgnet
 git clone https://github.com/facebookresearch/sam3.git ../sam3
 pip install -e ../sam3
 ```
@@ -151,7 +154,7 @@ Point a SUN RGB-D VPGNet config to the processed public SUN RGB-D root and the
 generated SAM3 feature directory. Then train with:
 
 ```bash
-CONFIG=/path/to/vpgnet_sunrgbd.py \
+CONFIG=/path/to/your_vpgnet_sunrgbd_config.py \
 WORK_DIR=work_dirs/vpgnet_sunrgbd \
 bash scripts/run_train_vpgnet.sh
 ```
@@ -159,7 +162,7 @@ bash scripts/run_train_vpgnet.sh
 Evaluate a trained SUN RGB-D checkpoint with:
 
 ```bash
-CONFIG=/path/to/vpgnet_sunrgbd.py \
+CONFIG=/path/to/your_vpgnet_sunrgbd_config.py \
 CHECKPOINT=/path/to/checkpoint.pth \
 WORK_DIR=work_dirs/vpgnet_sunrgbd_eval \
 bash scripts/run_eval_vpgnet.sh
