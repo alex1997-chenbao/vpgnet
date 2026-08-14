@@ -48,27 +48,46 @@ pip install -v -e .
 ### 1. Public SUN RGB-D training path
 
 For public-dataset code validation, prepare SUN RGB-D with the standard
-MMDetection3D preprocessing pipeline, then train with a SUN RGB-D VPGNet config
-through the same training entry point:
+MMDetection3D preprocessing pipeline, extract SAM3-FP1 image features if the
+config uses visual priors, then train with a SUN RGB-D VPGNet config through
+the same training entry point. The full data-preparation notes are in
+`docs/SUNRGBD.md`.
 
 ```bash
-# Prepare SUN RGB-D using the official MMDetection3D data-preparation flow.
-# After preparation, set DATA_ROOT and ann_file fields in your SUN RGB-D config
-# to the generated SUN RGB-D infos.
-
-CONFIG=/path/to/vpgnet_sunrgbd.py \
-WORK_DIR=work_dirs/vpgnet_sunrgbd \
-bash scripts/run_train_vpgnet.sh
+# In an official MMDetection3D checkout:
+# 1) Download SUNRGBD.zip, SUNRGBDMeta2DBB_v2.mat,
+#    SUNRGBDMeta3DBB_v2.mat, and SUNRGBDtoolbox.zip.
+# 2) Run the official MATLAB extraction scripts.
+# 3) Generate the MMDetection3D infos:
+python tools/create_data.py sunrgbd \
+  --root-path ./data/sunrgbd \
+  --out-dir ./data/sunrgbd \
+  --extra-tag sunrgbd
 ```
 
-If the SUN RGB-D config uses SAM3 visual priors, extract image features before
-training:
+Use the processed `data/sunrgbd` root in this repository, then extract SAM3-FP1
+features:
 
 ```bash
 DATA_DIR=data/sunrgbd \
 IMAGE_DIR=data/sunrgbd/sunrgbd_trainval/image \
 SAM_OUTPUT_DIR=data/sunrgbd/sunrgbd_trainval/sam_f \
+SAM3_REPO=../sam3 \
+FEATURE_LEVEL=1 \
+SAM_RESOLUTION=1008 \
+SAVE_DTYPE=float16 \
 bash scripts/extract_sam3_features.sh
+```
+
+If the SAM3 checkpoint is already available locally, pass it with
+`SAM_CHECKPOINT=/path/to/sam3.pt`.
+
+Train on SUN RGB-D:
+
+```bash
+CONFIG=/path/to/vpgnet_sunrgbd.py \
+WORK_DIR=work_dirs/vpgnet_sunrgbd \
+bash scripts/run_train_vpgnet.sh
 ```
 
 Evaluate a trained SUN RGB-D checkpoint with:
