@@ -1,8 +1,53 @@
 # Reproduce
 
-## Prepare Data
+This repository provides two validation paths:
 
-Download the train/test dataset from Hugging Face:
+1. public SUN RGB-D training with the released code;
+2. self-collected airport-luggage validation with the released data,
+   checkpoint, and evaluation utilities.
+
+## 1. Public SUN RGB-D Training Path
+
+For public-dataset code validation, first prepare SUN RGB-D using the standard
+MMDetection3D data-preparation pipeline. Then point a SUN RGB-D VPGNet config
+to the generated `sunrgbd_infos_train.pkl` and `sunrgbd_infos_val.pkl` files.
+
+Train with the common VPGNet training entry:
+
+```bash
+cd VPGNet-Airport-Luggage-OpenSource
+
+CONFIG=/path/to/vpgnet_sunrgbd.py \
+WORK_DIR=work_dirs/vpgnet_sunrgbd \
+bash scripts/run_train_vpgnet.sh
+```
+
+If the SUN RGB-D config uses SAM3 visual priors, extract SAM3-FP1 features
+before training:
+
+```bash
+DATA_DIR=data/sunrgbd \
+IMAGE_DIR=data/sunrgbd/sunrgbd_trainval/image \
+SAM_OUTPUT_DIR=data/sunrgbd/sunrgbd_trainval/sam_f \
+bash scripts/extract_sam3_features.sh
+```
+
+Evaluate a trained SUN RGB-D checkpoint with:
+
+```bash
+CONFIG=/path/to/vpgnet_sunrgbd.py \
+CHECKPOINT=/path/to/checkpoint.pth \
+WORK_DIR=work_dirs/vpgnet_sunrgbd_eval \
+bash scripts/run_eval_vpgnet.sh
+```
+
+No SUN RGB-D checkpoint or SUN RGB-D pretrained model is released here.
+
+## 2. Self-collected Airport-luggage Validation Path
+
+### Prepare Data
+
+Download the airport-luggage train/test dataset from Hugging Face:
 
 ```bash
 cd VPGNet-Airport-Luggage-OpenSource
@@ -57,7 +102,7 @@ One-shot preparation and training:
 bash scripts/prepare_and_train_vpgnet.sh
 ```
 
-## Evaluate
+### Evaluate
 
 Download the pretrained checkpoint:
 
@@ -79,7 +124,7 @@ python tools/test.py \
   --work-dir work_dirs/vpgnet_airport_luggage_eval
 ```
 
-## Train
+### Train
 
 ```bash
 cd VPGNet-Airport-Luggage-OpenSource
@@ -89,7 +134,7 @@ bash scripts/run_train_vpgnet.sh
 The released config trains for 50 epochs with one luggage class, fixed height
 configuration, 20000 sampled points, and the VPGNet fusion/refinement modules.
 
-## Export JSONL Predictions
+### Export JSONL Predictions
 
 Use the checkpoint downloaded by `scripts/download_checkpoint.sh`.
 
@@ -99,7 +144,7 @@ bash scripts/export_vpgnet_predictions.sh
 
 The output path is `work_dirs/vpgnet_predictions/val_predictions.jsonl`.
 
-## Subset Evaluation Utilities
+### Subset Evaluation Utilities
 
 After exporting predictions and preparing a quality CSV:
 

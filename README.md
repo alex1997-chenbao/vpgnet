@@ -1,9 +1,15 @@
 # VPGNet Airport Luggage Detection
 
-Clean release package for VPGNet, a single-class top-view 3D detector for
-airport luggage scenes. This package keeps the modified MMDetection3D source,
-the VPGNet config, evaluation utilities, and metadata for the best checkpoint
-used in the current experiments.
+Clean release package for VPGNet, a visual-prior-guided 3D detector. This
+package keeps the modified MMDetection3D source, the VPGNet airport-luggage
+config, evaluation utilities, and metadata for the released airport-luggage
+checkpoint.
+
+The repository is organized around two validation paths:
+
+1. public SUN RGB-D training with the released code, for code-level validation;
+2. self-collected airport-luggage validation, with the released data,
+   checkpoint, and evaluation scripts.
 
 ## Included
 
@@ -11,8 +17,8 @@ used in the current experiments.
   - detector integration: `mmdet3d/models/detectors/imvotenet.py`
   - GCA and feature fusion modules: `mmdet3d/models/my_module/`
   - luggage dataset and SAM feature loading: `mmdet3d/datasets/`
-- Best config: `configs/vpgnet/vpgnet_airport_luggage.py`
-- Best checkpoint metadata: `checkpoints/best.json`
+- Airport-luggage config: `configs/vpgnet/vpgnet_airport_luggage.py`
+- Airport-luggage checkpoint metadata: `checkpoints/best.json`
 - Core tools:
   - `tools/train.py`
   - `tools/test.py`
@@ -23,7 +29,8 @@ used in the current experiments.
   - `tools/misc/postprocess_vpgnet_with_sam3_instance_masks.py`
   - `tools/misc/visualize_vpgnet_predictions_o3d.py`
 
-The public training and test dataset is available on Hugging Face:
+The self-collected airport-luggage train/test dataset is available on Hugging
+Face:
 
 ```text
 https://huggingface.co/datasets/alex-chenbao1997/vpgnet-airport-luggage
@@ -37,6 +44,45 @@ Install this package in the same style as MMDetection3D:
 cd VPGNet-Airport-Luggage-OpenSource
 pip install -v -e .
 ```
+
+### 1. Public SUN RGB-D training path
+
+For public-dataset code validation, prepare SUN RGB-D with the standard
+MMDetection3D preprocessing pipeline, then train with a SUN RGB-D VPGNet config
+through the same training entry point:
+
+```bash
+# Prepare SUN RGB-D using the official MMDetection3D data-preparation flow.
+# After preparation, set DATA_ROOT and ann_file fields in your SUN RGB-D config
+# to the generated SUN RGB-D infos.
+
+CONFIG=/path/to/vpgnet_sunrgbd.py \
+WORK_DIR=work_dirs/vpgnet_sunrgbd \
+bash scripts/run_train_vpgnet.sh
+```
+
+If the SUN RGB-D config uses SAM3 visual priors, extract image features before
+training:
+
+```bash
+DATA_DIR=data/sunrgbd \
+IMAGE_DIR=data/sunrgbd/sunrgbd_trainval/image \
+SAM_OUTPUT_DIR=data/sunrgbd/sunrgbd_trainval/sam_f \
+bash scripts/extract_sam3_features.sh
+```
+
+Evaluate a trained SUN RGB-D checkpoint with:
+
+```bash
+CONFIG=/path/to/vpgnet_sunrgbd.py \
+CHECKPOINT=/path/to/checkpoint.pth \
+WORK_DIR=work_dirs/vpgnet_sunrgbd_eval \
+bash scripts/run_eval_vpgnet.sh
+```
+
+No SUN RGB-D checkpoint is released in this repository.
+
+### 2. Self-collected airport-luggage validation path
 
 SAM3 feature extraction may be run in a separate SAM3 environment. The saved
 `.pt` features are environment-independent and are then consumed by the VPGNet

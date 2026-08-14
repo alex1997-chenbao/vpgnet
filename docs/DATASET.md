@@ -1,6 +1,7 @@
-# Dataset Notes
+# Airport-luggage Dataset Notes
 
-The dataset is not included in git. The train/test files needed by VPGNet are
+The self-collected airport-luggage dataset is not included in git. The
+train/test files needed by the released airport-luggage VPGNet config are
 published on Hugging Face:
 
 ```text
@@ -13,7 +14,12 @@ Download them with:
 bash scripts/download_dataset.sh
 ```
 
-The released config expects a SUN RGB-D style root:
+The released airport-luggage config uses a SUN RGB-D-style directory layout for
+compatibility with MMDetection3D data pipelines. The directory name
+`data/sunrgbd` is a layout convention here; the files downloaded by
+`scripts/download_dataset.sh` are the self-collected airport-luggage data.
+
+The expected root is:
 
 ```text
 data/sunrgbd/
