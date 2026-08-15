@@ -2,7 +2,7 @@
 set -euo pipefail
 
 HF_BIN="${HF_BIN:-hf}"
-MODEL_REPO="${MODEL_REPO:-alex-chenbao1997/vpgnet-airport-luggage}"
+MODEL_REPO="${MODEL_REPO:-alex135632/vpgnet-airport-luggage}"
 CHECKPOINT_NAME="${CHECKPOINT_NAME:-best.pth}"
 CHECKPOINT_DIR="${CHECKPOINT_DIR:-checkpoints}"
 MAX_WORKERS="${MAX_WORKERS:-4}"

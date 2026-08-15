@@ -2,7 +2,7 @@
 set -euo pipefail
 
 HF_BIN="${HF_BIN:-hf}"
-DATASET_REPO="${DATASET_REPO:-alex-chenbao1997/vpgnet-airport-luggage}"
+DATASET_REPO="${DATASET_REPO:-alex135632/vpgnet-airport-luggage}"
 DATA_DIR="${DATA_DIR:-data/sunrgbd}"
 MAX_WORKERS="${MAX_WORKERS:-8}"
 USE_PROXY="${USE_PROXY:-0}"

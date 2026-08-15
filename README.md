@@ -33,7 +33,7 @@ The self-collected airport-luggage train/test dataset is available on Hugging
 Face:
 
 ```text
-https://huggingface.co/datasets/alex-chenbao1997/vpgnet-airport-luggage
+https://huggingface.co/datasets/alex135632/vpgnet-airport-luggage
 ```
 
 ## Quick Start
@@ -170,7 +170,7 @@ airport-luggage test metrics are:
 
 | Model | Visual prior | AP@0.25 | AP@0.50 | Checkpoint |
 |---|---|---:|---:|---|
-| VPGNet | SAM3-FP1 | 0.9846 | 0.9794 | [Hugging Face](https://huggingface.co/alex-chenbao1997/vpgnet-airport-luggage/blob/main/best.pth) |
+| VPGNet | SAM3-FP1 | 0.9846 | 0.9794 | [Hugging Face](https://huggingface.co/alex135632/vpgnet-airport-luggage/blob/main/best.pth) |
 
 ## Data Layout
 

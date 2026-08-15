@@ -5,7 +5,7 @@ train/test files needed by the released airport-luggage VPGNet config are
 published on Hugging Face:
 
 ```text
-https://huggingface.co/datasets/alex-chenbao1997/vpgnet-airport-luggage
+https://huggingface.co/datasets/alex135632/vpgnet-airport-luggage
 ```
 
 Download them with:
