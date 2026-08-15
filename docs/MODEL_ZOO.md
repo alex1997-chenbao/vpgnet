@@ -2,7 +2,7 @@
 
 | Model | Visual prior | AP@0.25 | AP@0.50 | Weight |
 |---|---|---:|---:|---|
-| VPGNet | SAM3-FP1 | 0.9846 | 0.9794 | [Hugging Face](https://huggingface.co/alex135632/vpgnet-airport-luggage/blob/main/best.pth) |
+| VPGNet | SAM3-FP1 | 0.9846 | 0.9794 | `scripts/download_checkpoint.sh` |
 
 Checkpoint metadata:
 

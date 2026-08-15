@@ -29,19 +29,15 @@ The repository is organized around two validation paths:
   - `tools/misc/postprocess_vpgnet_with_sam3_instance_masks.py`
   - `tools/misc/visualize_vpgnet_predictions_o3d.py`
 
-The self-collected airport-luggage train/test dataset is available on Hugging
-Face:
-
-```text
-https://huggingface.co/datasets/alex135632/vpgnet-airport-luggage
-```
+The self-collected airport-luggage train/test dataset can be downloaded with
+`scripts/download_dataset.sh`.
 
 ## Quick Start
 
 Install this package in the same style as MMDetection3D:
 
 ```bash
-git clone https://github.com/alex135632/vpgnet.git
+git clone <repository-url>
 cd vpgnet
 pip install -v -e .
 ```
@@ -170,7 +166,7 @@ airport-luggage test metrics are:
 
 | Model | Visual prior | AP@0.25 | AP@0.50 | Checkpoint |
 |---|---|---:|---:|---|
-| VPGNet | SAM3-FP1 | 0.9846 | 0.9794 | [Hugging Face](https://huggingface.co/alex135632/vpgnet-airport-luggage/blob/main/best.pth) |
+| VPGNet | SAM3-FP1 | 0.9846 | 0.9794 | `scripts/download_checkpoint.sh` |
 
 ## Data Layout
 

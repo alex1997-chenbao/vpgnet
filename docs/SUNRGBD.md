@@ -81,7 +81,7 @@ Use this processed `data/sunrgbd` root directly in this repository, or create a
 symlink to it:
 
 ```bash
-git clone https://github.com/alex135632/vpgnet.git
+git clone <repository-url>
 cd vpgnet
 ln -s /path/to/official/mmdetection3d/data/sunrgbd data/sunrgbd
 ```
