@@ -41,7 +41,7 @@ https://huggingface.co/datasets/alex-chenbao1997/vpgnet-airport-luggage
 Install this package in the same style as MMDetection3D:
 
 ```bash
-git clone https://github.com/alex1997-chenbao/vpgnet.git
+git clone https://github.com/alex135632/vpgnet.git
 cd vpgnet
 pip install -v -e .
 ```

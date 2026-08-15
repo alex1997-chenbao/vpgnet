@@ -72,7 +72,7 @@ If the SUN RGB-D config uses SAM3 visual priors, install SAM3 and extract
 SAM3-FP1 features:
 
 ```bash
-git clone https://github.com/alex1997-chenbao/vpgnet.git
+git clone https://github.com/alex135632/vpgnet.git
 cd vpgnet
 git clone https://github.com/facebookresearch/sam3.git ../sam3
 pip install -e ../sam3
