@@ -542,7 +542,7 @@ test_pipeline = [
 ]
 train_cfg = dict(max_epochs=50, type='EpochBasedTrainLoop', val_interval=1)
 train_dataloader = dict(
-    batch_size=10,
+    batch_size=7,
     dataset=dict(
         dataset=dict(
             ann_file='sunrgbd_trainval/sunrgbd_infos_train.pkl',

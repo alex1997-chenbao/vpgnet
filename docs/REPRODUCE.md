@@ -205,8 +205,10 @@ cd vpgnet
 bash scripts/run_train_vpgnet.sh
 ```
 
-The released config trains for 50 epochs with one luggage class, fixed height
-configuration, 20000 sampled points, and the VPGNet fusion/refinement modules.
+The released config trains for 50 epochs with one luggage class, batch size 7,
+fixed-height configuration, 20000 sampled points, and the VPGNet
+fusion/refinement modules. Validation and test dataloaders keep their
+evaluation batch settings.
 
 ### Export JSONL Predictions
 
