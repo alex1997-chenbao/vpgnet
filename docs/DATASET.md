@@ -2,9 +2,13 @@
 
 The self-collected airport-luggage dataset is not included in git. The
 train/test files needed by the released airport-luggage VPGNet config are
-published on Hugging Face and can be downloaded with the provided script.
+published on Hugging Face and can be downloaded from:
 
-Download them with:
+```text
+https://huggingface.co/datasets/alex135632/vpgnet-airport-luggage
+```
+
+The provided script downloads the same dataset to the expected local layout:
 
 ```bash
 bash scripts/download_dataset.sh

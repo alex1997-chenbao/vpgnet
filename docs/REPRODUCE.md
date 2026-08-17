@@ -119,6 +119,13 @@ No SUN RGB-D checkpoint or SUN RGB-D pretrained model is released here.
 
 ## 2. Self-collected Airport-luggage Validation Path
 
+Download locations:
+
+```text
+Dataset:    https://huggingface.co/datasets/alex135632/vpgnet-airport-luggage
+Checkpoint: https://huggingface.co/alex135632/vpgnet-airport-luggage/blob/main/best.pth
+```
+
 ### Prepare Data
 
 Download the airport-luggage train/test dataset from Hugging Face:
